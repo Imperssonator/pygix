@@ -1,0 +1,5 @@
+  - pyfai==0.14.2
+  - pyfftw==0.10.4
+  - pygix==0.1.4a0
+  - pyopencl==2018.1+cl12
+  - silx==0.6.1

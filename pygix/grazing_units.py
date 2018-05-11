@@ -16,6 +16,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
+from __future__ import division
+from past.utils import old_div
 __author__ = "Thomas Dane, Jerome Kieffer"
 __contact__ = "thomasgdane@gmail.com"
 __license__ = "GPLv3+"
@@ -110,7 +113,7 @@ TTH_DEG = TTH = Enum(REPR="2theta_deg",
                      abs_center="absa_center_array",
                      abs_corner="absa_corner_array",
                      abs_delta="absa_delta_array",
-                     scale=180.0/pi)
+                     scale=old_div(180.0,pi))
 
 TTH_RAD = Enum(REPR="2theta_rad",
                IPL_UNIT="2theta_f_rad",
@@ -149,7 +152,7 @@ GI_UNITS = (TTH_DEG, TTH_RAD, Q_NM, Q_A)
 
 def to_unit(obj):
     giUnit = None
-    if type(obj) in types.StringTypes:
+    if type(obj) in (str,):
         for one_unit in GI_UNITS:
             if one_unit.REPR == obj:
                 giUnit = one_unit
@@ -164,7 +167,7 @@ def to_unit(obj):
 
 def ip_unit(obj):
     ipl_giUnit = None
-    if type(obj) in types.StringTypes:
+    if type(obj) in (str,):
         for one_unit in GI_UNITS:
             if one_unit.IPL_UNIT == obj:
                 ipl_giUnit = one_unit
@@ -179,7 +182,7 @@ def ip_unit(obj):
 
 def op_unit(obj):
     opl_giUnit = None
-    if type(obj) in types.StringTypes:
+    if type(obj) in (str,):
         for one_unit in GI_UNITS:
             if one_unit.OPL_UNIT == obj:
                 opl_giUnit = one_unit
@@ -221,8 +224,8 @@ def op_unit(obj):
 
 def absolute_unit(obj):
     abs_giUnit = None
-    print type(obj)
-    if type(obj) in types.StringTypes:
+    print(type(obj))
+    if type(obj) in (str,):
         for one_unit in ABS_UNITS:
             if one_unit.REPR == obj:
                 abs_giUnit = one_unit
@@ -233,6 +236,6 @@ def absolute_unit(obj):
         logger.error("Unable to recognize this type unit '%s' of type %s. "
                      "Valid units are 2th_deg, 2th_rad, q_nm^-1, q_A^-1 and r_mm"\
                      % (obj, type(obj)))
-    print abs_giUnit
+    print(abs_giUnit)
     return abs_giUnit        
 

@@ -26,7 +26,10 @@ References:
     [2] Busing and Levy, Acta Crystallogr., (1967), 22, 457.
     [3] Dane et al, Soft Matter, (2013), 9, 10501.
 """
+from __future__ import division
 
+from builtins import range
+from past.utils import old_div
 import numpy as np
 from numpy import pi, sqrt, cos, sin, arcsin, arccos, arctan2
 
@@ -138,11 +141,11 @@ def calc_reciprocal_lattice(a, b, c, alpha, beta, gamma):
     reciprocal_lattice[1] = 2 * pi * (a * c * sin(beta)) / volume
     reciprocal_lattice[2] = 2 * pi * (a * b * sin(gamma)) / volume
     reciprocal_lattice[3] = arcsin(
-        volume / (a * b * c * sin(beta) * sin(gamma)))
+        old_div(volume, (a * b * c * sin(beta) * sin(gamma))))
     reciprocal_lattice[4] = arcsin(
-        volume / (a * b * c * sin(alpha) * sin(gamma)))
+        old_div(volume, (a * b * c * sin(alpha) * sin(gamma))))
     reciprocal_lattice[5] = arcsin(
-        volume / (a * b * c * sin(alpha) * sin(beta)))
+        old_div(volume, (a * b * c * sin(alpha) * sin(beta))))
     return reciprocal_lattice
 
 
@@ -201,7 +204,7 @@ def calc_rotation_angles(g_hkl):
         chi (float): orientation angle.
     """
     phi = arctan2(g_hkl[1], g_hkl[0])
-    chi = arccos(g_hkl[2] / sqrt(g_hkl[0] ** 2 + g_hkl[1] ** 2 + g_hkl[2] ** 2))
+    chi = arccos(old_div(g_hkl[2], sqrt(g_hkl[0] ** 2 + g_hkl[1] ** 2 + g_hkl[2] ** 2)))
     return phi, chi
 
 

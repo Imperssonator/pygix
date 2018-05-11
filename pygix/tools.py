@@ -38,7 +38,9 @@ There are two main tools:
 References:
     [1] Stribeck and Nöchel, J. Appl. Crystallogr., (2009), 42, 295.
 """
+from __future__ import division
 
+from past.utils import old_div
 import numpy as np
 from . import io
 
@@ -72,8 +74,8 @@ def quadrant_average(data, x=None, y=None, dummy=0, filename=None):
         cen_x = np.argmin(abs(x))
         cen_y = np.argmin(abs(y))
     elif (x is None) and (y is None):
-        cen_y = data.shape[0] / 2.0
-        cen_x = data.shape[1] / 2.0
+        cen_y = old_div(data.shape[0], 2.0)
+        cen_x = old_div(data.shape[1], 2.0)
     else:
         raise RuntimeError('Must pass both x and y scales or neither')
 
@@ -103,8 +105,8 @@ def quadrant_average(data, x=None, y=None, dummy=0, filename=None):
     out[np.where(mask == 0)] = dummy
 
     out_full = np.zeros((out.shape[0] * 2, out.shape[1] * 2))
-    cen_x = out_full.shape[1] / 2.0
-    cen_y = out_full.shape[0] / 2.0
+    cen_x = old_div(out_full.shape[1], 2.0)
+    cen_y = old_div(out_full.shape[0], 2.0)
 
     out_full[0:cen_y, 0:cen_x] = np.flipud(np.fliplr(out))
     out_full[0:cen_y, cen_x:] = np.flipud(out)
@@ -174,10 +176,10 @@ def chi_roi(radial_pos, radial_width, chi_range=None, filename=None):
         chi_pos = None
     else:
         chi_width = chi_range[1] - chi_range[0]
-        chi_pos = chi_range[0] + chi_width / 2.0
+        chi_pos = chi_range[0] + old_div(chi_width, 2.0)
 
-    radial_min = radial_pos - radial_width / 2.0
-    radial_max = radial_pos + radial_width / 2.0
+    radial_min = radial_pos - old_div(radial_width, 2.0)
+    radial_max = radial_pos + old_div(radial_width, 2.0)
     roi_x, roi_y = _calc_sector((radial_min, radial_max), chi_pos, chi_width)
 
     if filename:
@@ -200,8 +202,8 @@ def op_box_roi(ip_pos, ip_width, op_range, filename=None):
     param = locals()  # passed only to io to write key, val in the header
     param.pop('filename')
 
-    ip_min = ip_pos - ip_width / 2.0
-    ip_max = ip_pos + ip_width / 2.0
+    ip_min = ip_pos - old_div(ip_width, 2.0)
+    ip_max = ip_pos + old_div(ip_width, 2.0)
     roi_x, roi_y = _calc_box((ip_min, ip_max), op_range)
 
     if filename:
@@ -224,8 +226,8 @@ def ip_box_roi(op_pos, op_width, ip_range, filename=None):
     param = locals()  # passed only to io to write key, val in the header
     param.pop('filename')
 
-    op_min = op_pos - op_width / 2.0
-    op_max = op_pos + op_width / 2.0
+    op_min = op_pos - old_div(op_width, 2.0)
+    op_max = op_pos + old_div(op_width, 2.0)
     roi_x, roi_y = _calc_box(ip_range, (op_min, op_max))
 
     if filename:
@@ -254,8 +256,8 @@ def _calc_sector(radial_range, chi_pos, chi_width):
         chi_max = 359
         npts = 360
     else:
-        chi_min = -(chi_pos - chi_width / 2.0 - 90.0)
-        chi_max = -(chi_pos + chi_width / 2.0 - 90.0)
+        chi_min = -(chi_pos - old_div(chi_width, 2.0) - 90.0)
+        chi_max = -(chi_pos + old_div(chi_width, 2.0) - 90.0)
         npts = abs(int(chi_max - chi_min))
 
     chi = np.radians(np.linspace(chi_min, chi_max, npts))

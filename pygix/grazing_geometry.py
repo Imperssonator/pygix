@@ -18,6 +18,7 @@
 #
 from __future__ import absolute_import, print_function, division
 
+from builtins import range
 __authors__ = ["Thomas Dane", "Jérôme Kieffer"]
 __license__ = "GPLv3+"
 __author__ = "Thomas Dane, Jerome Kieffer"

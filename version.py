@@ -24,7 +24,9 @@
 # ###########################################################################*/
 
 """Unique place where the version number is defined."""
+from __future__ import print_function
 
+from builtins import str
 __authors__ = ["Jérôme Kieffer"]
 __license__ = "MIT"
 __date__ = "17/03/2016"
@@ -66,4 +68,4 @@ hexversion |= version_info[1] * 1 << 16
 hexversion |= version_info[0] * 1 << 24
 
 if __name__ == '__main__':
-    print version
+    print(version)

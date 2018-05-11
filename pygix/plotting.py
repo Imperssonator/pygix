@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from builtins import zip
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -17,14 +18,12 @@ colormap = getattr(plt.cm, default_cmap)
 lcolor = colormap(95)
 
 # Settings for plotting
-font_dict = {'family': 'sans-serif',
-             'style': 'normal',
-             'weight': 'normal',
-             'sans-serif': 'Helvetica',
-             'size': 9}
+# font_dict = {'family': 'sans-serif',
+             # 'sans-serif': ['Helvetica'],
+             # 'size': 9}
 
 fig_dict = {'figsize': (3.25, 3.25),
-            'dpi': 140}
+            'dpi': 96}
 
 axes_dict = {'linewidth': 0.75,
              'labelpad': 8}
@@ -32,29 +31,30 @@ axes_dict = {'linewidth': 0.75,
 lines_dict = {'linewidth': 0.75,
               'markersize': 3}
 
-mpl.rc('font', **font_dict)
+# mpl.rc('font', **font_dict)
 mpl.rc('figure', **fig_dict)
 mpl.rc('axes', **axes_dict)
 mpl.rc('lines', **lines_dict)
-mpl.rc('text', usetex=True)
+# mpl.rc('text', usetex=True)
 
-latexpre = [r'\usepackage{siunitx}',
-            r'\sisetup{detect-all}',
-            r'\usepackage{helvet}',
-            r'\usepackage[EULERGREEK]{sansmath}',
-            r'\sansmath']
-mpl.rcParams['text.latex.preamble'] = latexpre
+# latexpre = [r'\usepackage{siunitx}',
+            # r'\sisetup{detect-all}',
+            # r'\usepackage{helvet}',
+            # r'\usepackage[EULERGREEK]{sansmath}',
+            # r'\sansmath']
+# mpl.rcParams['text.latex.preamble'] = latexpre
 
 DEFAULT_UNIT = 'nm^-1'
 LABELS_DICT = {
-    'raw': ['y (pixels)', 'x (pixels)'],
-    'angular': ['2theta_f (deg)', 'alpha_f (deg)'],
-    'rsm': ['q_xy (nm^-1)', 'q_z (nm^-1)'],
-    'polar': ['q (nm^-1)', 'chi (deg)'],
-    'q': ['q (nm^-1)', 'Intensity (a.u.)'],
-    'chi': ['chi (deg)', 'Intensity (a.u.)'],
-    'qz': ['q_z (nm^-1)', 'Intensity (a.u.)'],
-    'qxy': ['q_xy (nm^-1)', 'Intensity (a.u.)']}
+	'raw': ['y (pixels)', 'x (pixels)'],
+	'angular': [r'$2\theta_f \: (deg)$', r'$\alpha_f \: (deg)$'],
+	'rsm': [r'$q_{xy} \: (nm^{-1})$', r'$q_z \: (nm^{-1})$'],
+	'rsma': [r'$q_{xy} \: (\AA^{-1})$', r'$q_z \: (\AA^{-1})$'],
+	'polar': [r'$q \: (nm^{-1})$', r'$chi \: (deg)$'],
+	'q': [r'$q \: (nm^{-1})$', r'$Intensity \: (a.u.)$'],
+	'chi': [r'$chi \: (deg)$', r'$Intensity \: (a.u.)$'],
+	'qz': [r'$q_z \: (nm^{-1})$', r'$Intensity \: (a.u.)$'],
+	'qxy': [r'$q_{xy} \: (nm^{-1})$', r'$Intensity \: (a.u.)$']}
 
 
 def show():
@@ -238,8 +238,10 @@ def plot(x, y,
             xlabel = tmp_xlabel
         if ylabel is None:
             ylabel = tmp_ylabel
-    plt.xlabel(get_axis_label(xlabel))
-    plt.ylabel(get_axis_label(ylabel))
+    # plt.xlabel(get_axis_label(xlabel))
+    # plt.ylabel(get_axis_label(ylabel))
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
 
     # set the apsect ratio to square, problem is, if you use the
     # zoom function on the widget the data apsect remains the same
@@ -256,7 +258,7 @@ def plot(x, y,
         plt.legend(lines, legend)
 
     if tight_layout:
-        plt.tight_layout()
+        plt.subplots_adjust(right=0.85)
 
     if filename is not None:
         plt.savefig(filename, dpi=300, bbox_inches='tight')
@@ -319,9 +321,8 @@ def implot(data, x=None, y=None, mode=None,
         Returns only im object if newfig=False, otherwise
         (fig, im).
     """
-    if mode and (mode not in ['raw', 'angular', 'rsm', 'polar']):
-        raise RuntimeError('pygix.plotting.implot: mode must be raw, angular'
-                           ' or rsm')
+    if mode and (mode not in ['raw', 'angular', 'rsm', 'rsma', 'polar']):
+        raise RuntimeError('pygix.plotting.implot: mode must be raw, angular or rsm')
     if mode == 'raw':
         origin = 'upper'
     else:
@@ -378,25 +379,25 @@ def implot(data, x=None, y=None, mode=None,
             xlabel = tmp_xlabel
         if ylabel is None:
             ylabel = tmp_ylabel
-    plt.xlabel(get_axis_label(xlabel))
-    plt.ylabel(get_axis_label(ylabel))
+    # plt.xlabel(get_axis_label(xlabel))
+    # plt.ylabel(get_axis_label(ylabel))
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
 
     if colorbar:
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.05)
         plt.colorbar(im, cax=cax)
 
-    ax.set_axis_bgcolor(colormap(0))
-
     if tight_layout:
-        plt.tight_layout()
+        plt.subplots_adjust(right=0.85)
 
     if filename is not None:
         plt.savefig(filename, dpi=300, bbox_inches='tight')
 
     if show:
         plt.show()
-
+        
     if newfig:
         return fig, im, ax
     else:

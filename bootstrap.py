@@ -6,7 +6,9 @@ by patching your PYTHONPATH on the fly
 
 example: ./bootstrap.py ipython
 """
+from __future__ import print_function
 
+from past.builtins import execfile
 __authors__ = ["Frédéric-Emmanuel Picca", "Jérôme Kieffer"]
 __contact__ = "jerome.kieffer@esrf.eu"
 __license__ = "MIT"

@@ -22,6 +22,7 @@ Main module of pygix that users will interact with.
 """
 from __future__ import absolute_import, print_function, division
 
+from builtins import str
 __authors__ = ["Thomas Dane", "Jérôme Kieffer"]
 __license__ = "GPLv3+"
 __date__ = "18/03/2016"
@@ -102,34 +103,63 @@ except ImportError as error:
     splitPixelFullCSR = None
 
 from pyFAI.opencl import ocl
-
 if ocl:
     try:
-        from pyFAI import ocl_azim  # IGNORE:F0401
+        from pyFAI.opencl import azim_hist as ocl_azim  # IGNORE:F0401
     except ImportError as error:  # IGNORE:W0703
-        logger.warning("Unable to import pyFAI.ocl_azim"
-                       ": %s" % error)
+        logger.error("Unable to import pyFAI.ocl_azim: %s",
+                     error)
         ocl_azim = None
     try:
-        from pyFAI import ocl_azim_csr  # IGNORE:F0401
+        from pyFAI.opencl import azim_csr as ocl_azim_csr  # IGNORE:F0401
     except ImportError as error:
-        logger.error("Unable to import pyFAI.ocl_azim_csr"
-                     ": %s" % error)
+        logger.error("Unable to import pyFAI.ocl_azim_csr: %s",
+                     error)
         ocl_azim_csr = None
     try:
-        from pyFAI import ocl_azim_lut  # IGNORE:F0401
+        from pyFAI.opencl import azim_lut as ocl_azim_lut  # IGNORE:F0401
     except ImportError as error:  # IGNORE:W0703
-        logger.error("Unable to import pyFAI.ocl_azim_lut for"
-                     ": %s" % error)
+        logger.error("Unable to import pyFAI.ocl_azim_lut for: %s",
+                     error)
         ocl_azim_lut = None
     try:
-        from pyFAI import ocl_sort
+        from pyFAI.opencl import sort as ocl_sort
     except ImportError as error:  # IGNORE:W0703
-        logger.error("Unable to import pyFAI.ocl_sort for"
-                     ": %s" % error)
+        logger.error("Unable to import pyFAI.ocl_sort for: %s",
+                     error)
         ocl_sort = None
 else:
     ocl_azim = ocl_azim_csr = ocl_azim_lut = None
+	
+# from pyFAI.opencl import ocl
+
+# if ocl:
+    # try:
+        # from pyFAI import ocl_azim  # IGNORE:F0401
+    # except ImportError as error:  # IGNORE:W0703
+        # logger.warning("Unable to import pyFAI.ocl_azim"
+                       # ": %s" % error)
+        # ocl_azim = None
+    # try:
+        # from pyFAI import ocl_azim_csr  # IGNORE:F0401
+    # except ImportError as error:
+        # logger.error("Unable to import pyFAI.ocl_azim_csr"
+                     # ": %s" % error)
+        # ocl_azim_csr = None
+    # try:
+        # from pyFAI import ocl_azim_lut  # IGNORE:F0401
+    # except ImportError as error:  # IGNORE:W0703
+        # logger.error("Unable to import pyFAI.ocl_azim_lut for"
+                     # ": %s" % error)
+        # ocl_azim_lut = None
+    # try:
+        # from pyFAI import ocl_sort
+    # except ImportError as error:  # IGNORE:W0703
+        # logger.error("Unable to import pyFAI.ocl_sort for"
+                     # ": %s" % error)
+        # ocl_sort = None
+# else:
+    # ocl_azim = ocl_azim_csr = ocl_azim_lut = None
 
 
 class Transform(GrazingGeometry):
@@ -1922,7 +1952,7 @@ class Transform(GrazingGeometry):
         method : str 
             Method used to compute the dark. Can be "mean" or "median".
         """
-        if type(files) in types.StringTypes:
+        if type(files) in (str,):
             files = [i.strip() for i in files.split(",")]
         elif not files:
             files = []
@@ -1950,7 +1980,7 @@ class Transform(GrazingGeometry):
         method : str 
             Method used to compute the flat. Can be "mean" or "median".
         """
-        if type(files) in types.StringTypes:
+        if type(files) in (str,):
             files = [i.strip() for i in files.split(",")]
         elif not files:
             files = []
